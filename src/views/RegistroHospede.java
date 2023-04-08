@@ -309,6 +309,11 @@ public class RegistroHospede extends JFrame {
 						hospedeController.registrar(nome, sobreNome, dataEntrada, nacionalidade, telefone, idReserva);
 
 						JOptionPane.showMessageDialog(null, "Informações salvas com sucesso!");
+
+						MenuUsuario menuUsuario = new MenuUsuario();
+						menuUsuario.setVisible(true);
+						dispose();
+						
 					} catch (Exception ex) {
 						JOptionPane.showMessageDialog(null, "Ocorreu um erro durante o processo!");
 						throw new RuntimeException(ex);

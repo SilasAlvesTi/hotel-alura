@@ -1,25 +1,32 @@
 package views;
 
-import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ImageIcon;
 import java.awt.Color;
-import javax.swing.JLabel;
+import java.awt.EventQueue;
 import java.awt.Font;
-import javax.swing.JTabbedPane;
 import java.awt.Toolkit;
-import javax.swing.SwingConstants;
-import javax.swing.JSeparator;
-import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
+import br.com.alura.hotel.controllers.ReservaController;
+import br.com.alura.hotel.models.Reserva;
 
 @SuppressWarnings("serial")
 public class Buscar extends JFrame {
@@ -110,7 +117,7 @@ public class Buscar extends JFrame {
 		modeloHospedes.addColumn("Telefone");
 		modeloHospedes.addColumn("Numero de Reserva");
 		JScrollPane scroll_tableHuespedes = new JScrollPane(tbHospedes);
-		panel.addTab("Huéspedes", new ImageIcon(Buscar.class.getResource("/imagenes/pessoas.png")), scroll_tableHuespedes, null);
+		panel.addTab("Hóspedes", new ImageIcon(Buscar.class.getResource("/imagenes/pessoas.png")), scroll_tableHuespedes, null);
 		scroll_tableHuespedes.setVisible(true);
 		
 		JLabel lblNewLabel_2 = new JLabel("");
@@ -208,7 +215,51 @@ public class Buscar extends JFrame {
 		btnbuscar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
+				if (txtBuscar.getText().isEmpty()) {
+					ReservaController reservaController = new ReservaController();
+					
+					try {
+						List<Reserva> reservas = reservaController.listar();
+						for (Reserva reserva : reservas) {
+							modelo.addRow(new Object[]{
+								reserva.getId(), 
+								reserva.getDataEntrada(),
+								reserva.getDataSaida(),
+								reserva.getValor(),
+								reserva.getFormaPagamento()
+							});
+						}
+					} catch (Exception ex) {
+						throw new RuntimeException(ex);
+					}
+				} else {
+					boolean idValido;
+					try {
+						idValido = Integer.parseInt(txtBuscar.getText()) > 0;
+					} catch (Exception ex) {
+						throw new RuntimeException(ex);
+					}
+					if (idValido) {
+	
+						ReservaController reservaController = new ReservaController();
+						
+						try {
+							modelo.setRowCount(0);
+							List<Reserva> reservas = reservaController.listarPeloId(Integer.parseInt(txtBuscar.getText()));
+							for (Reserva reserva : reservas) {
+								modelo.addRow(new Object[]{
+									reserva.getId(), 
+									reserva.getDataEntrada(),
+									reserva.getDataSaida(),
+									reserva.getValor(),
+									reserva.getFormaPagamento()
+								});
+							}
+						} catch (Exception ex) {
+							throw new RuntimeException(ex);
+						}
+					} 
+				}
 			}
 		});
 		btnbuscar.setLayout(null);

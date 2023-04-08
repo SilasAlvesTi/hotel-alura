@@ -19,6 +19,22 @@ public class Reserva {
         return id;
     }
 
+    public String getDataEntrada() {
+        return dataEntrada;
+    }
+
+    public String getDataSaida() {
+        return dataSaida;
+    }
+
+    public float getValor() {
+        return valor;
+    }
+
+    public String getFormaPagamento() {
+        return formaPagamento;
+    }
+
     @Override
     public String toString() {
         return "Reserva: " + id +

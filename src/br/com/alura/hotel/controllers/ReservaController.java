@@ -21,8 +21,8 @@ public class ReservaController {
 		return produtos;
 	}
 
-	public List<Reserva> listarPeloId() {
-		List<Reserva> produtos = this.reservaDAO.listarPeloId(1);
+	public List<Reserva> listarPeloId(Integer id) {
+		List<Reserva> produtos = this.reservaDAO.listarPeloId(id);
 		return produtos;
 	}
 
