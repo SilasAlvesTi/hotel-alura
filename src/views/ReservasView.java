@@ -309,17 +309,26 @@ public class ReservasView extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (ReservasView.txtDataE.getDate() != null && ReservasView.txtDataS.getDate() != null) {
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-					String dataEntrada = sdf.format(txtDataE.getDate());
-					String dataSaida = sdf.format(txtDataS.getDate());
-					float valor = Float.parseFloat(txtValor.getText());
-					String formaPagamento = (String) txtFormaPagamento.getSelectedItem();
+					try {
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						String dataEntrada = sdf.format(txtDataE.getDate());
+						String dataSaida = sdf.format(txtDataS.getDate());
+						float valor = Float.parseFloat(txtValor.getText());
+						String formaPagamento = (String) txtFormaPagamento.getSelectedItem();
 
-					ReservaController reservaController = new ReservaController();
-					String id = String.valueOf(reservaController.reservar(dataEntrada, dataSaida, valor, formaPagamento));
+						ReservaController reservaController = new ReservaController();
+						String id = String.valueOf(reservaController.reservar(dataEntrada, dataSaida, valor, formaPagamento));
 
-					RegistroHospede registro = new RegistroHospede(id);
-					registro.setVisible(true);
+						JOptionPane.showMessageDialog(null, "Informações salvas com sucesso!");
+						
+						RegistroHospede registro = new RegistroHospede(id);
+						registro.setVisible(true);
+						
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(null, "Ocorreu um erro durante o processo!");
+						throw new RuntimeException(ex);
+					}
+					
 				} else {
 					JOptionPane.showMessageDialog(null, "Deve preencher todos os campos.");
 				}
