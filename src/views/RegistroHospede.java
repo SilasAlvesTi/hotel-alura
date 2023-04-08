@@ -9,12 +9,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.text.Format;
+import java.text.SimpleDateFormat;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
@@ -23,16 +25,18 @@ import javax.swing.border.EmptyBorder;
 
 import com.toedter.calendar.JDateChooser;
 
+import br.com.alura.hotel.controllers.HospedeController;
+
 @SuppressWarnings("serial")
 public class RegistroHospede extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtNome;
-	private JTextField txtSobrenome;
-	private JTextField txtTelefone;
-	private JTextField txtNreserva;
-	private JDateChooser txtDataN;
-	private JComboBox<Format> txtNacionalidade;
+	private static JTextField txtNome;
+	private static JTextField txtSobrenome;
+	private static JTextField txtTelefone;
+	private static JTextField txtNreserva;
+	private static JDateChooser txtDataN;
+	private static JComboBox<Format> txtNacionalidade;
 	private JLabel labelExit;
 	private JLabel labelAtras;
 	int xMouse, yMouse;
@@ -44,7 +48,7 @@ public class RegistroHospede extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegistroHospede frame = new RegistroHospede("1");
+					RegistroHospede frame = new RegistroHospede("2");
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -240,6 +244,7 @@ public class RegistroHospede extends JFrame {
 		txtNreserva.setBackground(Color.WHITE);
 		txtNreserva.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		txtNreserva.setText(id);
+		txtNreserva.setEditable(false);
 		contentPane.add(txtNreserva);
 		
 		JSeparator separator_1_2 = new JSeparator();
@@ -283,6 +288,34 @@ public class RegistroHospede extends JFrame {
 		btnsalvar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				boolean camposPreenchidos = (RegistroHospede.txtNome.getText() != null 
+						&& RegistroHospede.txtSobrenome.getText() != null
+						&& RegistroHospede.txtTelefone.getText() != null
+				);
+
+				if (camposPreenchidos) {
+					try {
+						String nome = txtNome.getText();
+						String sobreNome = txtSobrenome.getText();
+
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						String dataEntrada = sdf.format(txtDataN.getDate());
+
+						String nacionalidade = (String) txtNacionalidade.getSelectedItem();
+						String telefone = txtTelefone.getText();
+						int idReserva = Integer.parseInt(txtNreserva.getText());
+
+						HospedeController hospedeController = new HospedeController();
+						hospedeController.registrar(nome, sobreNome, dataEntrada, nacionalidade, telefone, idReserva);
+
+						JOptionPane.showMessageDialog(null, "Informações salvas com sucesso!");
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(null, "Ocorreu um erro durante o processo!");
+						throw new RuntimeException(ex);
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Deve preencher todos os campos.");
+				}
 			}
 		});
 		btnsalvar.setLayout(null);

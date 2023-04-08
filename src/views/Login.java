@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -110,17 +112,25 @@ public class Login extends JFrame {
 		labelExit.setHorizontalAlignment(SwingConstants.CENTER);		
 		
 		txtUsuario = new JTextField();
-		txtUsuario.addMouseListener(new MouseAdapter() {
+		txtUsuario.addFocusListener(new FocusListener() {
 			@Override
-			public void mousePressed(MouseEvent e) {
-				 if (txtUsuario.getText().equals("Digite seu nome de usuario")) {
-					 txtUsuario.setText("");
-					 txtUsuario.setForeground(Color.black);
-			        }
-			        if (String.valueOf(txtSenha.getPassword()).isEmpty()) {
-			        	txtSenha.setText("********");
-			        	txtSenha.setForeground(Color.gray);
-			        }
+			public void focusGained(FocusEvent arg0) {
+				if (txtUsuario.getText().equalsIgnoreCase("Digite seu nome de usuario")) {
+					txtUsuario.setText("");
+					txtUsuario.setForeground(Color.black);
+		        }
+		        if (String.valueOf(txtSenha.getPassword()).equals("")) {
+		        	txtSenha.setText("********");
+					txtSenha.setForeground(Color.gray);
+		        }
+			}
+
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (txtUsuario.getText().equals("")) {
+					txtUsuario.setText("Digite seu nome de usuario");
+					txtUsuario.setForeground(Color.gray);
+		        }
 			}
 		});
 		txtUsuario.setFont(new Font("Roboto", Font.PLAIN, 16));
@@ -149,9 +159,9 @@ public class Login extends JFrame {
 		
 		txtSenha = new JPasswordField();
 		txtSenha.setText("********");
-		txtSenha.addMouseListener(new MouseAdapter() {
+		txtSenha.addFocusListener(new FocusListener() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void focusGained(FocusEvent arg0) {
 				if (String.valueOf(txtSenha.getPassword()).equals("********")) {
 					txtSenha.setText("");
 					txtSenha.setForeground(Color.black);
@@ -161,7 +171,16 @@ public class Login extends JFrame {
 		        	txtUsuario.setForeground(Color.gray);
 		        }
 			}
+
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if (String.valueOf(txtSenha.getPassword()).equals("")) {
+					txtSenha.setText("********");
+					txtSenha.setForeground(Color.gray);
+		        }
+			}
 		});
+
 		txtSenha.setForeground(SystemColor.activeCaptionBorder);
 		txtSenha.setFont(new Font("Roboto", Font.PLAIN, 16));
 		txtSenha.setBorder(javax.swing.BorderFactory.createEmptyBorder());
