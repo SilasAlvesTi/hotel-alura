@@ -10,7 +10,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -26,6 +29,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import com.toedter.calendar.JDateChooser;
+
+import br.com.alura.hotel.controllers.ReservaController;
 
 
 @SuppressWarnings("serial")
@@ -162,7 +167,7 @@ public class ReservasView extends JFrame {
 		txtValor.setBackground(SystemColor.text);
 		txtValor.setHorizontalAlignment(SwingConstants.CENTER);
 		txtValor.setForeground(Color.BLACK);
-		txtValor.setBounds(78, 328, 50, 33);
+		txtValor.setBounds(78, 328, 100, 33);
 		txtValor.setEditable(false);
 		txtValor.setFont(new Font("Roboto Black", Font.BOLD, 17));
 		txtValor.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -303,7 +308,16 @@ public class ReservasView extends JFrame {
 		btnProximo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (ReservasView.txtDataE.getDate() != null && ReservasView.txtDataS.getDate() != null) {		
+				if (ReservasView.txtDataE.getDate() != null && ReservasView.txtDataS.getDate() != null) {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					String dataEntrada = sdf.format(txtDataE.getDate());
+					String dataSaida = sdf.format(txtDataS.getDate());
+					float valor = Float.parseFloat(txtValor.getText());
+					String formaPagamento = (String) txtFormaPagamento.getSelectedItem();
+
+					ReservaController reservaController = new ReservaController();
+					reservaController.reservar(dataEntrada, dataSaida, valor, formaPagamento);
+					
 					RegistroHospede registro = new RegistroHospede();
 					registro.setVisible(true);
 				} else {
@@ -327,11 +341,11 @@ public class ReservasView extends JFrame {
 
 	protected void verificaSeOsDoisCamposDateEstaoPreenchidos() {
 		if (txtDataE.getDate() != null && txtDataS.getDate() != null) {
-			
-			
-			System.out.println(txtDataE.getDate() + " " + txtDataS.getDate());
-			txtDataE.setDate(null);
-			txtDataS.setDate(null);
+			LocalDateTime from = LocalDateTime.ofInstant(txtDataE.getDate().toInstant(), ZoneId.systemDefault());
+			LocalDateTime to = LocalDateTime.ofInstant(txtDataS.getDate().toInstant(), ZoneId.systemDefault());
+
+			Duration dias = Duration.between(from, to);
+			txtValor.setText(String.valueOf(dias.toDays() * 50.00));
 		}
 	}
 
@@ -345,10 +359,6 @@ public class ReservasView extends JFrame {
 		int x = evt.getXOnScreen();
 		int y = evt.getYOnScreen();
 		this.setLocation(x - xMouse, y - yMouse);
-	}
-
-	private static void setValorReserva(String valor) {
-		txtValor.setText(valor);
 	}
 
 }

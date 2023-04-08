@@ -1,5 +1,6 @@
 package br.com.alura.hotel.models;
 
+
 public class Hospede {
     private Integer id;
     private String nome;
