@@ -44,7 +44,7 @@ public class RegistroHospede extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegistroHospede frame = new RegistroHospede();
+					RegistroHospede frame = new RegistroHospede("1");
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -56,7 +56,7 @@ public class RegistroHospede extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RegistroHospede() {
+	public RegistroHospede(String id) {
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroHospede.class.getResource("/imagenes/lOGO-50PX.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -239,6 +239,7 @@ public class RegistroHospede extends JFrame {
 		txtNreserva.setColumns(10);
 		txtNreserva.setBackground(Color.WHITE);
 		txtNreserva.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		txtNreserva.setText(id);
 		contentPane.add(txtNreserva);
 		
 		JSeparator separator_1_2 = new JSeparator();

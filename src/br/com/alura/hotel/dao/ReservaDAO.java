@@ -46,16 +46,23 @@ public class ReservaDAO {
         return reservas;
     }
 
-    public void reservar(String dataEntrada, String dataSaida, float valor, String formaPagamento){
+    public int reservar(String dataEntrada, String dataSaida, float valor, String formaPagamento){
         String sql = "INSERT INTO RESERVA (DataEntrada, DataSaida, Valor, FormaPagamento) "+
                 "VALUES (?, ?, ?, ?);";
 
-        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstm = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstm.setString(1, dataEntrada);
             pstm.setString(2, dataSaida);
             pstm.setFloat(3, valor);
             pstm.setString(4, formaPagamento);
             pstm.execute();
+
+            ResultSet rs = pstm.getGeneratedKeys();
+            rs.next();
+            int id = rs.getInt(1);
+            
+            return id;
+            
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

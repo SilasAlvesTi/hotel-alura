@@ -316,9 +316,9 @@ public class ReservasView extends JFrame {
 					String formaPagamento = (String) txtFormaPagamento.getSelectedItem();
 
 					ReservaController reservaController = new ReservaController();
-					reservaController.reservar(dataEntrada, dataSaida, valor, formaPagamento);
-					
-					RegistroHospede registro = new RegistroHospede();
+					String id = String.valueOf(reservaController.reservar(dataEntrada, dataSaida, valor, formaPagamento));
+
+					RegistroHospede registro = new RegistroHospede(id);
 					registro.setVisible(true);
 				} else {
 					JOptionPane.showMessageDialog(null, "Deve preencher todos os campos.");
