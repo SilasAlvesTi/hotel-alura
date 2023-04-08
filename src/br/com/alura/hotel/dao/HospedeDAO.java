@@ -31,6 +31,24 @@ public class HospedeDAO {
         return hospedes;
     }
 
+    public void registrar(String nome, String sobreNome, String dataNascimeento, String nacionalidade, String telefone, int idReserva) {
+        String sql = "INSERT INTO HOSPEDE(Nome, Sobrenome, DataNascimento, Nacionalidade, Telefone, IdReserva)"+
+                " VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setString(1, nome);
+            pstm.setString(2, sobreNome);
+            pstm.setString(3, dataNascimeento);
+            pstm.setString(4, nacionalidade);
+            pstm.setString(5, telefone);
+            pstm.setInt(6, idReserva);
+
+            pstm.execute();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void trasformarResultSetEmReserva(List<Hospede> hospedes, PreparedStatement pstm) throws SQLException {
 		try (ResultSet rst = pstm.getResultSet()) {
 			while (rst.next()) {
