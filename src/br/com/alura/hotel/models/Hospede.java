@@ -21,6 +21,7 @@ public class Hospede {
         this.telefone = telefone;
         this.idReserva = idReserva;
     }
+    
 
     @Override
     public String toString() {
@@ -31,6 +32,29 @@ public class Hospede {
                 " nacionalidade: " + nacionalidade +
                 " telefone: " + telefone + 
                 " idReserva: " + idReserva;
+    }
+
+
+    public Integer getId() {
+        return id;
+    }
+    public String getNome() {
+        return nome;
+    }
+    public String getSobreNome() {
+        return sobreNome;
+    }
+    public String getDataNascimento() {
+        return dataNascimento;
+    }
+    public String getNacionalidade() {
+        return nacionalidade;
+    }
+    public String getTelefone() {
+        return telefone;
+    }
+    public Integer getIdReserva() {
+        return idReserva;
     }
 
 }

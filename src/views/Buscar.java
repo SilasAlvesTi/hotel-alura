@@ -8,7 +8,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -22,10 +21,11 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import br.com.alura.hotel.controllers.HospedeController;
 import br.com.alura.hotel.controllers.ReservaController;
+import br.com.alura.hotel.models.Hospede;
 import br.com.alura.hotel.models.Reserva;
 
 @SuppressWarnings("serial")
@@ -130,7 +130,6 @@ public class Buscar extends JFrame {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				headerMouseDragged(e);
-			     
 			}
 		});
 		header.addMouseListener(new MouseAdapter() {
@@ -215,37 +214,17 @@ public class Buscar extends JFrame {
 		btnbuscar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (txtBuscar.getText().isEmpty()) {
-					ReservaController reservaController = new ReservaController();
-					
-					try {
-						List<Reserva> reservas = reservaController.listar();
-						for (Reserva reserva : reservas) {
-							modelo.addRow(new Object[]{
-								reserva.getId(), 
-								reserva.getDataEntrada(),
-								reserva.getDataSaida(),
-								reserva.getValor(),
-								reserva.getFormaPagamento()
-							});
-						}
-					} catch (Exception ex) {
-						throw new RuntimeException(ex);
-					}
-				} else {
-					boolean idValido;
-					try {
-						idValido = Integer.parseInt(txtBuscar.getText()) > 0;
-					} catch (Exception ex) {
-						throw new RuntimeException(ex);
-					}
-					if (idValido) {
-	
+				int activeTabIndex = panel.getSelectedIndex();
+				int tabReservas = 0;
+				int tabHospedes = 1;
+
+				if (activeTabIndex == tabReservas) {
+					if (txtBuscar.getText().isEmpty()) {
 						ReservaController reservaController = new ReservaController();
 						
 						try {
 							modelo.setRowCount(0);
-							List<Reserva> reservas = reservaController.listarPeloId(Integer.parseInt(txtBuscar.getText()));
+							List<Reserva> reservas = reservaController.listar();
 							for (Reserva reserva : reservas) {
 								modelo.addRow(new Object[]{
 									reserva.getId(), 
@@ -258,8 +237,79 @@ public class Buscar extends JFrame {
 						} catch (Exception ex) {
 							throw new RuntimeException(ex);
 						}
-					} 
+					} else {
+						boolean idValido;
+						try {
+							idValido = Integer.parseInt(txtBuscar.getText()) > 0;
+						} catch (Exception ex) {
+							throw new RuntimeException(ex);
+						}
+						if (idValido) {
+		
+							ReservaController reservaController = new ReservaController();
+							
+							try {
+								modelo.setRowCount(0);
+								List<Reserva> reservas = reservaController.listarPeloId(Integer.parseInt(txtBuscar.getText()));
+								for (Reserva reserva : reservas) {
+									modelo.addRow(new Object[]{
+										reserva.getId(), 
+										reserva.getDataEntrada(),
+										reserva.getDataSaida(),
+										reserva.getValor(),
+										reserva.getFormaPagamento()
+									});
+								}
+							} catch (Exception ex) {
+								throw new RuntimeException(ex);
+							}
+						} 
+					}
+				} else if (activeTabIndex == tabHospedes) {
+					if (txtBuscar.getText().isEmpty()) {
+						HospedeController hospedeController = new HospedeController();
+						
+						try {
+							modeloHospedes.setRowCount(0);
+							List<Hospede> hospedes = hospedeController.listar();
+							for (Hospede hospede : hospedes) {
+								modeloHospedes.addRow(new Object[]{
+									hospede.getId(), 
+									hospede.getNome(),
+									hospede.getSobreNome(),
+									hospede.getDataNascimento(),
+									hospede.getNacionalidade(),
+									hospede.getTelefone(),
+									hospede.getIdReserva()
+								});
+							}
+						} catch (Exception ex) {
+							throw new RuntimeException(ex);
+						}
+					} else {
+
+						HospedeController hospedeController = new HospedeController();
+						try {
+							modeloHospedes.setRowCount(0);
+							List<Hospede> hospedes = hospedeController.listarPeloSobreNome(txtBuscar.getText());
+							for (Hospede hospede : hospedes) {
+								modeloHospedes.addRow(new Object[]{
+									hospede.getId(), 
+									hospede.getNome(),
+									hospede.getSobreNome(),
+									hospede.getDataNascimento(),
+									hospede.getNacionalidade(),
+									hospede.getTelefone(),
+									hospede.getIdReserva()
+								});
+							}
+						} catch (Exception ex) {
+							throw new RuntimeException(ex);
+						}
+						
+					}
 				}
+				
 			}
 		});
 		btnbuscar.setLayout(null);
@@ -306,14 +356,14 @@ public class Buscar extends JFrame {
 	}
 	
 	//Código que permite movimentar a janela pela tela seguindo a posição de "x" e "y"	
-	 private void headerMousePressed(java.awt.event.MouseEvent evt) {
-	        xMouse = evt.getX();
-	        yMouse = evt.getY();
-	    }
+	private void headerMousePressed(java.awt.event.MouseEvent evt) {
+		xMouse = evt.getX();
+		yMouse = evt.getY();
+	}
 
-	    private void headerMouseDragged(java.awt.event.MouseEvent evt) {
-	        int x = evt.getXOnScreen();
-	        int y = evt.getYOnScreen();
-	        this.setLocation(x - xMouse, y - yMouse);
-}
+	private void headerMouseDragged(java.awt.event.MouseEvent evt) {
+		int x = evt.getXOnScreen();
+		int y = evt.getYOnScreen();
+		this.setLocation(x - xMouse, y - yMouse);
+	}	
 }

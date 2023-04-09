@@ -21,6 +21,11 @@ public class HospedeController {
         return hospedes;
     }
 
+    public List<Hospede> listarPeloSobreNome(String sobreNome) {
+        List<Hospede> hospedes = this.hospedeDAO.listarPeloSobreNome(sobreNome);
+        return hospedes;
+    }
+
     public void registrar(String nome, String sobreNome, String dataNascimeento, String nacionalidade, String telefone, int idReserva) {
         this.hospedeDAO.registrar(nome, sobreNome, dataNascimeento, nacionalidade, telefone, idReserva);
     }

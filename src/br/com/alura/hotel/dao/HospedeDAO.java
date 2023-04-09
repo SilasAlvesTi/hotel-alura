@@ -31,6 +31,21 @@ public class HospedeDAO {
         return hospedes;
     }
 
+    public List<Hospede> listarPeloSobreNome(String sobreNome) {
+        List<Hospede> hospedes = new ArrayList<>();
+        String sql = "SELECT * FROM HOSPEDE WHERE SobreNome = ?;";
+
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setString(1, sobreNome);
+            pstm.execute();
+
+            trasformarResultSetEmReserva(hospedes, pstm);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return hospedes;
+    }
+
     public void registrar(String nome, String sobreNome, String dataNascimeento, String nacionalidade, String telefone, int idReserva) {
         String sql = "INSERT INTO HOSPEDE(Nome, Sobrenome, DataNascimento, Nacionalidade, Telefone, IdReserva)"+
                 " VALUES (?, ?, ?, ?, ?, ?)";
