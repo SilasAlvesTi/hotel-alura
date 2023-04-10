@@ -26,6 +26,10 @@ public class HospedeController {
         return hospedes;
     }
 
+    public void alterar(Integer id, String nome, String sobreNome, String dataNascimeento, String nacionalidade, String telefone, int idReserva) {
+        this.hospedeDAO.alterar(id, nome, sobreNome, dataNascimeento, nacionalidade, telefone, idReserva);
+    }
+
     public void registrar(String nome, String sobreNome, String dataNascimeento, String nacionalidade, String telefone, int idReserva) {
         this.hospedeDAO.registrar(nome, sobreNome, dataNascimeento, nacionalidade, telefone, idReserva);
     }

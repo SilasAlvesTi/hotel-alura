@@ -64,6 +64,24 @@ public class HospedeDAO {
         }
     }
 
+    public void alterar(Integer id, String nome, String sobreNome, String dataNascimeento, String nacionalidade, String telefone, int idReserva) {
+        String sql = "UPDATE HOSPEDE H SET H.Nome = ?, H.SobreNome = ?, H.DataNascimento = ?, " + 
+                "H.Nacionalidade = ?, H.Telefone = ?, H.IdReserva = ? WHERE iD = ?";
+
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setString(1, nome);
+            pstm.setString(2, sobreNome);
+            pstm.setString(3, dataNascimeento);
+            pstm.setString(4, nacionalidade);
+            pstm.setString(5, telefone);
+            pstm.setInt(6, idReserva);
+            pstm.setInt(7, id);
+            pstm.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void trasformarResultSetEmReserva(List<Hospede> hospedes, PreparedStatement pstm) throws SQLException {
 		try (ResultSet rst = pstm.getResultSet()) {
 			while (rst.next()) {

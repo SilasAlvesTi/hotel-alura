@@ -366,9 +366,9 @@ public class Buscar extends JFrame {
 		int activeTabIndex = panel.getSelectedIndex();
 		int tabReservas = 0;
 		int tabHospedes = 1;
+		
 		if (activeTabIndex == tabReservas) {
 			Object objetoDaLinha = (Object) modelo.getValueAt(tbReservas.getSelectedRow(), tbReservas.getSelectedColumn());
-			
 			if (objetoDaLinha instanceof Integer) {
 				System.out.println();
 				Integer id = (Integer) objetoDaLinha;
@@ -387,10 +387,22 @@ public class Buscar extends JFrame {
 			} else {
 				JOptionPane.showMessageDialog(this, "Por favor, selecione o ID");
 			}
-		} else if(activeTabIndex == tabHospedes) {
-			
+		} else if (activeTabIndex == tabHospedes) {
+			Object objetoDaLinha = (Object) modeloHospedes.getValueAt(tbHospedes.getSelectedRow(), tbHospedes.getSelectedColumn());
+			if (objetoDaLinha instanceof Integer) {
+				Integer id = (Integer) objetoDaLinha;
+				String nome = (String) modeloHospedes.getValueAt(tbHospedes.getSelectedRow(), 1);
+				String sobreNome = (String) modeloHospedes.getValueAt(tbHospedes.getSelectedRow(), 2);
+				String dataNascimento = (String) modeloHospedes.getValueAt(tbHospedes.getSelectedRow(), 3);
+				String nacionalidade = (String) modeloHospedes.getValueAt(tbHospedes.getSelectedRow(), 4);
+				String telefone = (String) modeloHospedes.getValueAt(tbHospedes.getSelectedRow(), 5);
+				Integer idReserva = (Integer) modeloHospedes.getValueAt(tbHospedes.getSelectedRow(), 6);
+
+				this.hospedeController.alterar(id, nome, sobreNome, dataNascimento, nacionalidade, telefone, idReserva);
+			}else {
+				JOptionPane.showMessageDialog(this, "Por favor, selecione o ID");
+			}
 		}
-		
 	}
 	
 	//Código que permite movimentar a janela pela tela seguindo a posição de "x" e "y"	
