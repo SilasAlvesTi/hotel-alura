@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -39,6 +40,8 @@ public class Buscar extends JFrame {
 	private DefaultTableModel modeloHospedes;
 	private JLabel labelAtras;
 	private JLabel labelExit;
+	private ReservaController reservaController;
+	private HospedeController hospedeController;
 	int xMouse, yMouse;
 
 	/**
@@ -61,6 +64,10 @@ public class Buscar extends JFrame {
 	 * Create the frame.
 	 */
 	public Buscar() {
+
+		this.reservaController = new ReservaController();
+		this.hospedeController = new HospedeController();
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Buscar.class.getResource("/imagenes/lOGO-50PX.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 571);
@@ -220,7 +227,6 @@ public class Buscar extends JFrame {
 
 				if (activeTabIndex == tabReservas) {
 					if (txtBuscar.getText().isEmpty()) {
-						ReservaController reservaController = new ReservaController();
 						
 						try {
 							modelo.setRowCount(0);
@@ -245,8 +251,6 @@ public class Buscar extends JFrame {
 							throw new RuntimeException(ex);
 						}
 						if (idValido) {
-		
-							ReservaController reservaController = new ReservaController();
 							
 							try {
 								modelo.setRowCount(0);
@@ -267,7 +271,6 @@ public class Buscar extends JFrame {
 					}
 				} else if (activeTabIndex == tabHospedes) {
 					if (txtBuscar.getText().isEmpty()) {
-						HospedeController hospedeController = new HospedeController();
 						
 						try {
 							modeloHospedes.setRowCount(0);
@@ -287,8 +290,6 @@ public class Buscar extends JFrame {
 							throw new RuntimeException(ex);
 						}
 					} else {
-
-						HospedeController hospedeController = new HospedeController();
 						try {
 							modeloHospedes.setRowCount(0);
 							List<Hospede> hospedes = hospedeController.listarPeloSobreNome(txtBuscar.getText());
@@ -338,6 +339,12 @@ public class Buscar extends JFrame {
 		lblEditar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		lblEditar.setBounds(0, 0, 122, 35);
 		btnEditar.add(lblEditar);
+		btnEditar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				alterar(panel);
+			}
+		});
 		
 		JPanel btnDeletar = new JPanel();
 		btnDeletar.setLayout(null);
@@ -353,6 +360,37 @@ public class Buscar extends JFrame {
 		lblExcluir.setBounds(0, 0, 122, 35);
 		btnDeletar.add(lblExcluir);
 		setResizable(false);
+	}
+
+	private void alterar(JTabbedPane panel) {
+		int activeTabIndex = panel.getSelectedIndex();
+		int tabReservas = 0;
+		int tabHospedes = 1;
+		if (activeTabIndex == tabReservas) {
+			Object objetoDaLinha = (Object) modelo.getValueAt(tbReservas.getSelectedRow(), tbReservas.getSelectedColumn());
+			
+			if (objetoDaLinha instanceof Integer) {
+				System.out.println();
+				Integer id = (Integer) objetoDaLinha;
+				String dataEntrada = (String) modelo.getValueAt(tbReservas.getSelectedRow(), 1);
+				String dataSaida = (String) modelo.getValueAt(tbReservas.getSelectedRow(), 2);
+				float valor;
+				if (modelo.getValueAt(tbReservas.getSelectedRow(), 3).getClass().getSimpleName().equals("String")) {
+					String valorString = (String) modelo.getValueAt(tbReservas.getSelectedRow(), 3);
+					valor = Float.valueOf(valorString);
+				} else {
+					valor = (float) modelo.getValueAt(tbReservas.getSelectedRow(), 3);
+				}
+				
+				String formaPagamento = (String) modelo.getValueAt(tbReservas.getSelectedRow(), 4);
+				this.reservaController.alterar(id, dataEntrada, dataSaida, valor, formaPagamento);
+			} else {
+				JOptionPane.showMessageDialog(this, "Por favor, selecione o ID");
+			}
+		} else if(activeTabIndex == tabHospedes) {
+			
+		}
+		
 	}
 	
 	//Código que permite movimentar a janela pela tela seguindo a posição de "x" e "y"	

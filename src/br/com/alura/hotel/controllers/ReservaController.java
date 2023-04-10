@@ -26,6 +26,10 @@ public class ReservaController {
 		return produtos;
 	}
 
+	public void alterar(Integer id, String dataEntrada, String dataSaida, float valor, String formaPagamento) {
+		this.reservaDAO.alterar(id, dataEntrada, dataSaida, valor, formaPagamento);
+	}
+
 	public int reservar(String dataEntrada, String dataSaida, float valor, String formaPagamento){
 		return this.reservaDAO.reservar(dataEntrada, dataSaida, valor, formaPagamento);
 	}

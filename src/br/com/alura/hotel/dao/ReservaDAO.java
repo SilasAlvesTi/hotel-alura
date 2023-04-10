@@ -68,6 +68,22 @@ public class ReservaDAO {
         }
     }
 
+    public void alterar(Integer id, String dataEntrada, String dataSaida, float valor, String formaPagamento) {
+        String sql = "UPDATE RESERVA R SET R.DataEntrada = ?, R.DataSaida = ?, " + 
+                "R.Valor = ?, R.FormaPagamento = ? WHERE iD = ?";
+
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setString(1, dataEntrada);
+            pstm.setString(2, dataSaida);
+            pstm.setFloat(3, valor);
+            pstm.setString(4, formaPagamento);
+            pstm.setInt(5, id);
+            pstm.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void trasformarResultSetEmReserva(List<Reserva> reservas, PreparedStatement pstm) throws SQLException {
 		try (ResultSet rst = pstm.getResultSet()) {
 			while (rst.next()) {
