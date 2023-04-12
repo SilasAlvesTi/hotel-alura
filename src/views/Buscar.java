@@ -352,6 +352,7 @@ public class Buscar extends JFrame {
 		btnDeletar.setBounds(767, 508, 122, 35);
 		btnDeletar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		contentPane.add(btnDeletar);
+
 		
 		JLabel lblExcluir = new JLabel("DELETAR");
 		lblExcluir.setHorizontalAlignment(SwingConstants.CENTER);
@@ -359,6 +360,12 @@ public class Buscar extends JFrame {
 		lblExcluir.setFont(new Font("Roboto", Font.PLAIN, 18));
 		lblExcluir.setBounds(0, 0, 122, 35);
 		btnDeletar.add(lblExcluir);
+		btnDeletar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				deletar(panel);
+			}
+		});
 		setResizable(false);
 	}
 
@@ -384,6 +391,7 @@ public class Buscar extends JFrame {
 				
 				String formaPagamento = (String) modelo.getValueAt(tbReservas.getSelectedRow(), 4);
 				this.reservaController.alterar(id, dataEntrada, dataSaida, valor, formaPagamento);
+				JOptionPane.showMessageDialog(this, "Dados alterados com sucesso!");
 			} else {
 				JOptionPane.showMessageDialog(this, "Por favor, selecione o ID");
 			}
@@ -401,6 +409,24 @@ public class Buscar extends JFrame {
 				this.hospedeController.alterar(id, nome, sobreNome, dataNascimento, nacionalidade, telefone, idReserva);
 			}else {
 				JOptionPane.showMessageDialog(this, "Por favor, selecione o ID");
+			}
+		}
+	}
+
+	private void deletar(JTabbedPane panel) {
+		int activeTabIndex = panel.getSelectedIndex();
+		int tabReservas = 0;
+		int tabHospedes = 1;
+		
+		if (activeTabIndex == tabReservas) {
+			Object objetoDaLinha = (Object) modelo.getValueAt(tbReservas.getSelectedRow(), tbReservas.getSelectedColumn());
+			if (objetoDaLinha instanceof Integer) {
+				Integer id = (Integer) objetoDaLinha;
+				this.reservaController.deletar(id);
+				modelo.removeRow(tbReservas.getSelectedRow());
+				JOptionPane.showMessageDialog(this, "Item excluído com sucesso!");
+			} else {
+				JOptionPane.showMessageDialog(this, "Por favor, selecionar o ID");
 			}
 		}
 	}

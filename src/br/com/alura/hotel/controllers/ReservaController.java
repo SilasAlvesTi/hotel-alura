@@ -33,4 +33,8 @@ public class ReservaController {
 	public int reservar(String dataEntrada, String dataSaida, float valor, String formaPagamento){
 		return this.reservaDAO.reservar(dataEntrada, dataSaida, valor, formaPagamento);
 	}
+
+	public void deletar(Integer id) {
+		this.reservaDAO.deletar(id);
+	}
 }

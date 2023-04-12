@@ -84,6 +84,18 @@ public class ReservaDAO {
         }
     }
 
+    public void deletar(Integer id) {
+        String sql = "DELETE FROM RESERVA WHERE Id = ?;";
+
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setInt(1, id);
+			pstm.execute();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+        
+    }
+
     private void trasformarResultSetEmReserva(List<Reserva> reservas, PreparedStatement pstm) throws SQLException {
 		try (ResultSet rst = pstm.getResultSet()) {
 			while (rst.next()) {
