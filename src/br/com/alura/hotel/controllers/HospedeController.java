@@ -33,4 +33,8 @@ public class HospedeController {
     public void registrar(String nome, String sobreNome, String dataNascimeento, String nacionalidade, String telefone, int idReserva) {
         this.hospedeDAO.registrar(nome, sobreNome, dataNascimeento, nacionalidade, telefone, idReserva);
     }
+
+    public void deletar(Integer id) {
+        this.hospedeDAO.deletar(id);
+    }
 }

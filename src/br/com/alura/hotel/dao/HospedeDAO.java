@@ -82,6 +82,17 @@ public class HospedeDAO {
         }
     }
 
+    public void deletar(Integer id) {
+        String sql = "DELETE FROM HOSPEDE WHERE Id = ?;";
+
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setInt(1, id);
+            pstm.execute();
+        } catch (Exception e) {
+           throw new RuntimeException(e);
+        }
+    }
+
     private void trasformarResultSetEmReserva(List<Hospede> hospedes, PreparedStatement pstm) throws SQLException {
 		try (ResultSet rst = pstm.getResultSet()) {
 			while (rst.next()) {

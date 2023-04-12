@@ -428,6 +428,16 @@ public class Buscar extends JFrame {
 			} else {
 				JOptionPane.showMessageDialog(this, "Por favor, selecionar o ID");
 			}
+		} else if (activeTabIndex == tabHospedes) {
+			Object objetoDaLinha = (Object) modeloHospedes.getValueAt(tbHospedes.getSelectedRow(), tbHospedes.getSelectedColumn());
+			if (objetoDaLinha instanceof Integer) {
+				Integer id = (Integer) objetoDaLinha;
+				this.hospedeController.deletar(id);
+				modeloHospedes.removeRow(tbHospedes.getSelectedRow());
+				JOptionPane.showMessageDialog(this, "Item excluído com sucesso!");
+			} else {
+				JOptionPane.showMessageDialog(this, "Por favor, selecionar o ID");
+			}
 		}
 	}
 	
